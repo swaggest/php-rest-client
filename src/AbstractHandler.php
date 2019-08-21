@@ -57,7 +57,7 @@ abstract class AbstractHandler
     {
         if (null === $this->rawResponse) {
             if (null === $this->promise) {
-                $this->rawResponse = $this->client->send($this->getRequest());
+                $this->rawResponse = $this->client->send($this->getRequest(), ['http_errors' => false]);
             } else {
                 throw new Exception('Request already sent in async mode', Exception::ALREADY_SENT);
             }
@@ -72,7 +72,7 @@ abstract class AbstractHandler
     {
         if (null === $this->rawResponse) {
             if (null === $this->promise) {
-                $this->promise = $this->client->sendAsync($this->getRequest())
+                $this->promise = $this->client->sendAsync($this->getRequest(), ['http_errors' => false])
                     ->then(function ($response) {
                         $this->rawResponse = $response;
                     });
