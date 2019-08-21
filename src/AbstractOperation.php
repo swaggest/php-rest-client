@@ -9,7 +9,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
 
-abstract class AbstractHandler
+abstract class AbstractOperation
 {
     /** @var ClientInterface */
     protected $client;
@@ -31,7 +31,7 @@ abstract class AbstractHandler
     /**
      * @return int
      * @throws GuzzleException
-     * @throws Exception
+     * @throws RestException
      */
     public function getResponseStatus()
     {
@@ -41,7 +41,7 @@ abstract class AbstractHandler
     /**
      * @return stdClass
      * @throws GuzzleException
-     * @throws Exception
+     * @throws RestException
      */
     public function getJsonResponse()
     {
@@ -51,7 +51,7 @@ abstract class AbstractHandler
     /**
      * @return ResponseInterface
      * @throws GuzzleException
-     * @throws Exception
+     * @throws RestException
      */
     public function getRawResponse()
     {
@@ -59,7 +59,7 @@ abstract class AbstractHandler
             if (null === $this->promise) {
                 $this->rawResponse = $this->client->send($this->getRequest(), ['http_errors' => false]);
             } else {
-                throw new Exception('Request already sent in async mode', Exception::ALREADY_SENT);
+                throw new RestException('Request already sent in async mode', RestException::ALREADY_SENT);
             }
         }
         return $this->rawResponse;

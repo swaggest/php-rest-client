@@ -60,7 +60,7 @@ abstract class AbstractConfig
     /**
      * @param RequestInterface $request
      * @param string[][] $securityGroups
-     * @throws Exception
+     * @throws RestException
      */
     public function applySecurity(RequestInterface $request, $securityGroups)
     {
@@ -86,7 +86,7 @@ abstract class AbstractConfig
                 $request = $middleware->prepareRequest($request);
             }
         } else {
-            throw new Exception('Missing required security: ' . json_encode($securityGroups), Exception::MISSING_SECURITY);
+            throw new RestException('Missing required security: ' . json_encode($securityGroups), RestException::MISSING_SECURITY);
         }
 
 
