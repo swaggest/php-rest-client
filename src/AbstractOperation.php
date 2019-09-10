@@ -14,9 +14,6 @@ abstract class AbstractOperation
     /** @var ClientInterface */
     protected $client;
 
-    /** @var AbstractConfig */
-    protected $config;
-
     /** @var RequestInterface */
     protected $rawRequest;
 
@@ -81,15 +78,16 @@ abstract class AbstractOperation
 
     /**
      * @param string[][] $securityGroups
+     * @param AbstractConfig $config
      * @throws RestException
      */
-    protected function applySecurity($securityGroups)
+    protected function applySecurity($securityGroups, AbstractConfig $config)
     {
         foreach ($securityGroups as $securityGroup) {
             $applicators = array();
             $found = true;
             foreach ($securityGroup as $securityName) {
-                if (null !== $applicator = $this->config->security($securityName)) {
+                if (null !== $applicator = $config->security($securityName)) {
                     $applicators[] = $applicator;
                 } else {
                     $found = false;
