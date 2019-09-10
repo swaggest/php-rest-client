@@ -12,17 +12,6 @@ abstract class AbstractConfig
 
     /**
      * @param string $name
-     * @param SecurityApplicator $applicator
-     * @return $this
-     */
-    public function withSecurity($name, SecurityApplicator $applicator)
-    {
-        $this->security[$name] = $applicator;
-        return $this;
-    }
-
-    /**
-     * @param string $name
      * @return SecurityApplicator|null
      */
     public function security($name)
