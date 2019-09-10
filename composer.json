@@ -14,10 +14,10 @@
   ],
   "require": {
     "guzzlehttp/guzzle": "^6.3",
-    "php": ">=5.5.0"
+    "php": ">=5.5.0",
+    "ext-json": "*"
   },
   "require-dev": {
-    "codeclimate/php-test-reporter": "0.1.2",
     "phpunit/phpunit": "4.8.36"
   },
   "autoload": {

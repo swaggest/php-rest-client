@@ -4,12 +4,11 @@ namespace Swaggest\RestClient;
 
 use Psr\Http\Message\RequestInterface;
 
-interface RequestMiddleware
+interface SecurityApplicator
 {
     /**
      * @param RequestInterface $request
      * @return RequestInterface
      */
-    public function prepareRequest(RequestInterface $request);
-
+    public function secureRequest(RequestInterface $request);
 }

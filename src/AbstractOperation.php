@@ -14,6 +14,9 @@ abstract class AbstractOperation
     /** @var ClientInterface */
     protected $client;
 
+    /** @var AbstractConfig */
+    protected $config;
+
     /** @var RequestInterface */
     protected $rawRequest;
 
@@ -79,6 +82,37 @@ abstract class AbstractOperation
             }
         }
         return $this->promise;
+    }
+
+    /**
+     * @param RequestInterface $request
+     * @param string[][] $securityGroups
+     * @return RequestInterface
+     * @throws RestException
+     */
+    public function applySecurity(RequestInterface $request, $securityGroups)
+    {
+        foreach ($securityGroups as $securityGroup) {
+            $applicators = array();
+            $found = true;
+            foreach ($securityGroup as $securityName) {
+                if (null !== $applicator = $this->config->security($securityName)) {
+                    $applicators[] = $applicator;
+                } else {
+                    $found = false;
+                    break;
+                }
+            }
+
+            if ($found) {
+                foreach ($applicators as $applicator) {
+                    $request = $applicator->secureRequest($request);
+                }
+                return $request;
+            }
+        }
+
+        throw new RestException('Missing required security: ' . json_encode($securityGroups), RestException::MISSING_SECURITY);
     }
 
 }

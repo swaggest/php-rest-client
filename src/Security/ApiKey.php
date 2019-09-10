@@ -3,12 +3,13 @@
 namespace Swaggest\RestClient\Security;
 
 use Psr\Http\Message\RequestInterface;
-use Swaggest\RestClient\RequestMiddleware;
+use Swaggest\RestClient\SecurityApplicator;
 
-abstract class ApiKeySecurity implements RequestMiddleware
+abstract class ApiKey implements SecurityApplicator
 {
     const IN_HEADER = 'header';
     const IN_QUERY = 'query';
+    const IN_COOKIE = 'cookie';
 
     /** @var string */
     protected $name;
@@ -20,7 +21,7 @@ abstract class ApiKeySecurity implements RequestMiddleware
     protected $in;
 
     /**
-     * ApiKeySecurity constructor.
+     * ApiKey constructor.
      * @param string $value
      */
     public function __construct($value)
@@ -32,15 +33,18 @@ abstract class ApiKeySecurity implements RequestMiddleware
      * @param RequestInterface $request
      * @return RequestInterface|static
      */
-    public function prepareRequest(RequestInterface $request)
+    public function secureRequest(RequestInterface $request)
     {
         if ($this->in === self::IN_HEADER) {
             return $request->withHeader($this->name, $this->value);
-        } else { // self::IN_QUERY
+        } elseif ($this->in === self::IN_QUERY) {
             $uri = $request->getUri();
             $query = $uri->getQuery();
             $query .= ($query ? '&' : '') . urlencode($this->name) . '=' . urlencode($this->value);
             return $request->withUri($uri->withQuery($query));
+        } elseif ($this->in === self::IN_COOKIE) {
+            return $request->withHeader('Cookie', $this->name . '=' . $this->value);
         }
+        return $request;
     }
 }
