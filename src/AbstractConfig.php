@@ -23,6 +23,18 @@ abstract class AbstractConfig
     }
 
     /**
+     * @codeCoverageIgnoreStart
+     * @param $baseUrl
+     * @return $this
+     */
+    public function setBaseUrl($baseUrl)
+    {
+        $this->baseUrl = $baseUrl;
+        return $this;
+    }
+    /** @codeCoverageIgnoreEnd */
+
+    /**
      * @return string
      * @codeCoverageIgnoreStart
      */
