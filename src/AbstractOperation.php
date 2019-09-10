@@ -27,11 +27,6 @@ abstract class AbstractOperation
     private $promise;
 
     /**
-     * @return RequestInterface
-     */
-    abstract function getRequest();
-
-    /**
      * @return int
      * @throws GuzzleException
      * @throws RestException
@@ -60,7 +55,7 @@ abstract class AbstractOperation
     {
         if (null === $this->rawResponse) {
             if (null === $this->promise) {
-                $this->rawResponse = $this->client->send($this->getRequest(), ['http_errors' => false]);
+                $this->rawResponse = $this->client->send($this->rawRequest, ['http_errors' => false]);
             } else {
                 throw new RestException('Request already sent in async mode', RestException::ALREADY_SENT);
             }
@@ -75,7 +70,7 @@ abstract class AbstractOperation
     {
         if (null === $this->rawResponse) {
             if (null === $this->promise) {
-                $this->promise = $this->client->sendAsync($this->getRequest(), ['http_errors' => false])
+                $this->promise = $this->client->sendAsync($this->rawRequest, ['http_errors' => false])
                     ->then(function ($response) {
                         $this->rawResponse = $response;
                     });
@@ -85,12 +80,10 @@ abstract class AbstractOperation
     }
 
     /**
-     * @param RequestInterface $request
      * @param string[][] $securityGroups
-     * @return RequestInterface
      * @throws RestException
      */
-    public function applySecurity(RequestInterface $request, $securityGroups)
+    protected function applySecurity($securityGroups)
     {
         foreach ($securityGroups as $securityGroup) {
             $applicators = array();
@@ -106,9 +99,9 @@ abstract class AbstractOperation
 
             if ($found) {
                 foreach ($applicators as $applicator) {
-                    $request = $applicator->secureRequest($request);
+                    $this->rawRequest = $applicator->secureRequest($this->rawRequest);
                 }
-                return $request;
+                return;
             }
         }
 
