@@ -70,6 +70,14 @@ abstract class AbstractOperation
     }
 
     /**
+     * @return RequestInterface
+     */
+    public function getRawRequest()
+    {
+        return $this->rawRequest;
+    }
+
+    /**
      * @return PromiseInterface
      */
     public function sendAsync()
