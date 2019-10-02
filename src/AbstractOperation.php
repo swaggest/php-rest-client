@@ -33,6 +33,9 @@ abstract class AbstractOperation
         return $this->getRawResponse()->getStatusCode();
     }
 
+    private $jsonResponseReady = false;
+    private $jsonResponse;
+
     /**
      * @return stdClass
      * @throws GuzzleException
@@ -40,10 +43,16 @@ abstract class AbstractOperation
      */
     public function getJsonResponse()
     {
-        return \GuzzleHttp\json_decode($this->getRawResponse()->getBody()->getContents());
+        if (!$this->jsonResponseReady) {
+            $this->jsonResponseReady = true;
+            $this->jsonResponse = \GuzzleHttp\json_decode($this->getRawResponse()->getBody()->getContents());
+        }
+        return $this->jsonResponse;
     }
 
     /**
+     * Reading body of raw response is not idempotent, therefore getJsonResponse will fail if the body was already read.
+     *
      * @return ResponseInterface
      * @throws GuzzleException
      * @throws RestException
