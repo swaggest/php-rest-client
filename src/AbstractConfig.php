@@ -24,7 +24,7 @@ abstract class AbstractConfig
 
     /**
      * @codeCoverageIgnoreStart
-     * @param $baseUrl
+     * @param string $baseUrl
      * @return $this
      */
     public function setBaseUrl($baseUrl)

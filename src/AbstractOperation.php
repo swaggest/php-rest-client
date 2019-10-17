@@ -63,7 +63,7 @@ abstract class AbstractOperation
             if (null === $this->promise) {
                 $this->rawResponse = $this->client->send($this->rawRequest, ['http_errors' => false]);
             } else {
-                throw new RestException('Request already sent in async mode', RestException::ALREADY_SENT);
+                $this->promise->wait();
             }
         }
         return $this->rawResponse;

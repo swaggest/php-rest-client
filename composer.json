@@ -2,7 +2,11 @@
   "name": "swaggest/rest-client",
   "type": "library",
   "description": "PHP REST client helpers",
-  "keywords": ["library"],
+  "keywords": [
+    "rest",
+    "swagger",
+    "openapi"
+  ],
   "homepage": "https://github.com/swaggest/php-rest-client",
   "license": "MIT",
   "authors": [
@@ -14,11 +18,12 @@
   ],
   "require": {
     "guzzlehttp/guzzle": "^6.3",
-    "php": ">=5.5.0",
+    "php": "^5.6|^7",
     "ext-json": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.8.36"
+    "phpunit/phpunit": "^5",
+    "swaggest/json-schema": "^0.12"
   },
   "autoload": {
     "psr-4": {
