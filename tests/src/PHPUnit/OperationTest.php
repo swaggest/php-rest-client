@@ -19,9 +19,7 @@ class OperationTest extends TestCase
 JSON;
 
         $handler = new MockHandler();
-        $handler->append(
-            new Response(200, ['x-next' => 'the-next-val'], $body),
-            );
+        $handler->append(new Response(200, ['x-next' => 'the-next-val'], $body));
 
         $client = new Client(['handler' => $handler]);
         $request = new GetPetsRequest();
